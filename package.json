@@ -1,0 +1,48 @@
+{
+  "name": "@canvara/canvara-error-handler",
+  "description": "canvara: common error handler module",
+  "version": "1.0.0",
+  "private": true,
+  "author": {
+    "name": "Ritesh Sangwan",
+    "email": "sangwan.ritesh@yahoo.in"
+  },
+  "keywords": [
+    "canvara",
+    "express error handler",
+    "middleware"
+  ],
+  "bugs": {
+    "url": "https://github.com/billidin/canvara-error-handler/issues"
+  },
+  "contributors": [],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/billidin/canvara-error-handler.git"
+  },
+  "homepage": "https://github.com/billidin/canvara-error-handler",
+  "license": "UNLICENSED",
+  "main": "index.js",
+  "dependencies": {
+    "common-errors": "^0.5.1",
+    "http-status": "^0.2.0",
+    "winston": "^1.0.0"
+  },
+  "devDependencies": {
+    "grunt-cli": "^0.1.13",
+    "grunt-env": "^0.4.1",
+    "grunt-contrib-jshint": "^0.10.0",
+    "grunt-mocha-test": "^0.10.2",
+    "mocha": "1.21.4",
+    "should": "^4.4.4",
+    "load-grunt-tasks": "^0.4.0"
+  },
+  "engines": {
+    "node": "0.12.x"
+  },
+  "files": [
+    "Readme.md",
+    "index.js"
+  ],
+  "scripts": {}
+}
