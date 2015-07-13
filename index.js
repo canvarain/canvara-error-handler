@@ -1,20 +1,23 @@
 /**
  * Copyright(c) 2015, canvara Technologies Pvt. Ltd.
  */
-/* jshint camelcase: false */
 'use strict';
+
+/**
+ * Main file for the module
+ * @author      ritesh
+ * @version     1.0.0
+ */
 
 /**
  * Module dependencies
  * @private
  */
-var httpStatus = require('http-status');
 var errors = require('common-errors');
-var winston = require('winston'),
-  emitter = require('eventemitter2').EventEmitter2;
+var winston = require('winston');
 
 var DEFAULT_NAME = 'ServerError',
-  ERROR_EVENT = 'error',
+  TEST_ENV = 'test',
   DEFAULT_MESSAGE = 'Internal server error';
 
 /**
@@ -43,19 +46,17 @@ CanvaraErrorHandler.prototype.middleware = function(err, req, res, next) {
       return res.end();
     }
   }
-  winston.error('Error while processing request [' + JSON.stringify(err) + ']', err.stack);
+  if(process.env.NODE_ENV !== TEST_ENV) {
+    winston.error('Error while processing request [' + JSON.stringify(err) + ']', err.stack);
+  }
   if(err instanceof Error) {
     var httpError = new errors.HttpStatusError(err);
-    if(err.status_code >= 500) {
+    if(err.statusCode >= 500) {
       httpError.message = DEFAULT_MESSAGE;
     }
-    res.status(httpError.status_code).json({ message: httpError.message, name: err.name || DEFAULT_NAME });
-  } else {
-    res.status(err.code || httpStatus.INTERNAL_SERVER_ERROR).json({ message: err.message || DEFAULT_MESSAGE, name: err.name || DEFAULT_NAME });
+    res.status(httpError.statusCode).json({ message: httpError.message, name: err.name || DEFAULT_NAME });
   }
 };
 
-// add listener for 'error' event
-emitter.on(ERROR_EVENT, function(err) {
-  winston.error('Unhandled error [' + JSON.stringify(err) +']' , err.stack);
-});
+// module exports
+module.exports = CanvaraErrorHandler;
