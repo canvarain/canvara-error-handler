@@ -14,7 +14,7 @@
  * @private
  */
 var errors = require('common-errors');
-var winston = require('winston');
+var logging = require('canvara-logging');
 
 var DEFAULT_NAME = 'ServerError',
   TEST_ENV = 'test',
@@ -47,7 +47,7 @@ CanvaraErrorHandler.prototype.middleware = function(err, req, res, next) {
     }
   }
   if(process.env.NODE_ENV !== TEST_ENV) {
-    winston.error('Error while processing request [' + JSON.stringify(err) + ']', err.stack);
+    logging.error('Error while processing request', err);
   }
   if(err instanceof Error) {
     var httpError = new errors.HttpStatusError(err);
