@@ -14,7 +14,7 @@
  * @private
  */
 var errors = require('common-errors');
-var logging = require('canvara-logging');
+var logging = require('@canvara/canvara-logging');
 
 var DEFAULT_NAME = 'ServerError',
   TEST_ENV = 'test',
@@ -28,34 +28,31 @@ function CanvaraErrorHandler(options) {
 }
 
 /**
- * Middleware function
+ * This function will return the middleware function
  * This function is added to the express application as last middleware in the middleware stack.
  * This will log the error and will send the appropriate message to the client.
- *
- * @param   {Error}     err             error instance
- * @param   {Object}    req             express request instance
- * @param   {Object}    res             express response instance
- * @param   {Function}  next            next function(middleware) to call
  */
-CanvaraErrorHandler.prototype.middleware = function(err, req, res, next) {
-  // if the error is not defined
-  if(!err) {
-    if(next) {
-      return next();
-    } else {
-      return res.end();
+CanvaraErrorHandler.prototype.middleware = function() {
+  return function(err, req, res, next) {
+    // if the error is not defined
+    if(!err) {
+      if(next) {
+        return next();
+      } else {
+        return res.end();
+      }
     }
-  }
-  if(process.env.NODE_ENV !== TEST_ENV) {
-    logging.error('Error while processing request', err);
-  }
-  if(err instanceof Error) {
-    var httpError = new errors.HttpStatusError(err);
-    if(err.statusCode >= 500) {
-      httpError.message = DEFAULT_MESSAGE;
+    if(process.env.NODE_ENV !== TEST_ENV) {
+      logging.error('Error while processing request', err);
     }
-    res.status(httpError.statusCode).json({ message: httpError.message, name: err.name || DEFAULT_NAME });
-  }
+    if(err instanceof Error) {
+      var httpError = new errors.HttpStatusError(err);
+      if(err.statusCode >= 500) {
+        httpError.message = DEFAULT_MESSAGE;
+      }
+      res.status(httpError.statusCode).json({ message: httpError.message, name: err.name || DEFAULT_NAME });
+    }
+  };
 };
 
 // module exports

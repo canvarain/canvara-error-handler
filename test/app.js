@@ -27,7 +27,8 @@ exports.createServer = function(error, options) {
   var errorHandler = new ErrorHandler(options);
   var app = express();
   app.get('/', function(req, res, next) {
-    errorHandler.middleware(error, req, res, next);
+    next(error);
   });
+  app.use(errorHandler.middleware());
   return app;
 };
