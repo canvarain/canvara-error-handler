@@ -17,7 +17,6 @@ var errors = require('common-errors');
 var logging = require('@canvara/canvara-logging');
 
 var DEFAULT_NAME = 'ServerError',
-  TEST_ENV = 'test',
   DEFAULT_MESSAGE = 'Internal server error';
 
 /**
@@ -42,9 +41,7 @@ CanvaraErrorHandler.prototype.middleware = function() {
         return res.end();
       }
     }
-    if(process.env.NODE_ENV !== TEST_ENV) {
-      logging.error('Error while processing request', err);
-    }
+    logging.error('Error while processing request', err);
     if(err instanceof Error) {
       var httpError = new errors.HttpStatusError(err);
       if(err.statusCode >= 500) {
